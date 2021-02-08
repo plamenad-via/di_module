@@ -123,7 +123,7 @@ class ModuleProvider<T extends Module> extends Provider<T> {
 
   final T module;
 
-  static T of<T>(BuildContext context, {bool listen = true}) =>
+  static T of<T>(BuildContext context, {bool listen = false}) =>
       Provider.of(context, listen: listen);
 }
 
