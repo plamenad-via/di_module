@@ -11,7 +11,7 @@ void main() {
 
     test(
         'Module cannot provide the same lazy singleton type without qualifier '
-            'name', () {
+        'name', () {
       expect(() => _TestModule2(), throwsAssertionError);
     });
 
@@ -26,7 +26,7 @@ void main() {
 
     test(
         'Different modules can provide same types '
-            'because they have different containers', () {
+        'because they have different containers', () {
       _TestModule3();
       _TestModule4();
     });
@@ -53,28 +53,28 @@ void main() {
 
     test(
         'Lazy singleton with qualifier returns different instances '
-            'per different qualifiers', () {
+        'per different qualifiers', () {
       final subject = _TestModule7();
       expect(identical(subject.testObject, subject.anotherTestObject), false);
     });
 
     test(
         'Singleton with qualifier returns different instance '
-            'per different qualifiers', () {
+        'per different qualifiers', () {
       final subject = _TestModule7();
       expect(identical(subject.testObject, subject.anotherTestObject), false);
     });
 
     test(
         'Factory with qualifier returns different instance '
-            'per different qualifiers', () {
+        'per different qualifiers', () {
       final subject = _TestModule7();
       expect(identical(subject.testObject, subject.anotherTestObject), false);
     });
 
     test(
         'Dependencies of lazy singleton cannot be specified after '
-            'registering it', () {
+        'registering it', () {
       final subject = _TestModule9();
       expect(subject.testObject, isNotNull);
     });

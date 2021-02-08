@@ -39,7 +39,7 @@ abstract class Module {
     if (buildContext != null) {
       Module parentModule;
       try {
-        parentModule = ModuleProvider.of<Module>(buildContext);
+        parentModule = ModuleProvider.of<Module>(buildContext, listen: false);
       } catch (_) {}
 
       if (parentModule != null) {
@@ -54,6 +54,10 @@ abstract class Module {
   }
 
   ///Provide an instance of [T] as a singleton
+  ///
+  ///[func] - the a function that will be used to provide instance of [T]
+  ///
+  ///[qualifierName] - the name that will be associated with this instance
   @protected
   void provideSingleton<T>(
     _FactoryFunction<T> func, {
@@ -67,6 +71,10 @@ abstract class Module {
   }
 
   ///Provide an instance of [T] by using a factory constructor
+  ///
+  ///[func] - the a function that will be used to provide instance of [T]
+  ///
+  ///[qualifierName] - the name that will be associated with this instance
   @protected
   void provideFactory<T>(
     _FactoryFunction<T> func, {
@@ -84,20 +92,29 @@ abstract class Module {
     _serviceLocator.clear();
   }
 
+  ///This method needs to be overridden in modules in order to provide
+  ///dependencies as either factory or singleton
   void provideInstances();
 }
 
 class ModuleProvider<T extends Module> extends Provider<T> {
+  ///Constructor of [ModuleProvider]
+  ///
+  ///[module] the [Module] that needs to be provided
+  ///
+  ///[child] the widget that will be built
   ModuleProvider({
     @required this.module,
-    child,
+    Widget child,
   }) : super(
-            create: (buildContext) {
-              module.buildContext = buildContext;
-              return module;
-            },
-            dispose: (_, module) => module.dispose(),
-            child: Provider<Module>.value(value: module, child: child)) {
+          create: (buildContext) {
+            module.buildContext = buildContext;
+            return module;
+          },
+          dispose: (_, module) => module.dispose(),
+          child: Provider<Module>.value(value: module, child: child),
+          lazy: false,
+        ) {
     if (T == Module) {
       throw StateError('You forgot to pass a type to the '
           'ModelProvider<T>() constructor');
@@ -198,11 +215,9 @@ class _ServiceFactory<T> {
       switch (type) {
         case _ServiceFactoryType.factory:
           return creationFunction() as T;
-          break;
         case _ServiceFactoryType.singleton:
           instance ??= creationFunction();
           return instance as T;
-          break;
       }
     } catch (e, s) {
       print('Error while creating $T');
