@@ -1,7 +1,7 @@
 import 'package:di_module/src/core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Module subjectModule;
+late Module subjectModule;
 
 void main() {
   group('Module unit tests', () {
