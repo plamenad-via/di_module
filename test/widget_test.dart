@@ -8,7 +8,7 @@ void main() {
     testWidgets('Module gets disposed when ModuleProvider gets disposed',
         (widgetTester) async {
       final mockModule = MockModule();
-      BuildContext innerContext;
+      late BuildContext innerContext;
 
       await widgetTester.pumpWidget(
         TestAppFrame(
@@ -35,7 +35,7 @@ void main() {
       await untilCalled(mockModule.dispose());
     });
 
-    testWidgets('Modules\' buildContext is null before attaching to tree',
+    testWidgets("Modules' buildContext is null before attaching to tree",
         (widgetTester) async {
       final parentModule = ParentModule();
       final childModule = ChildModule();
@@ -45,9 +45,9 @@ void main() {
     });
 
     testWidgets(
-        'ChildModule doesn\'t see ParentModule\'s dependencies until '
+        "ChildModule doesn't see ParentModule's dependencies until "
         'it is injected in a ModuleProvider lower in the tree '
-        'from ParentModule\'s ModuleProvider', (widgetTester) async {
+        "from ParentModule's ModuleProvider", (widgetTester) async {
       final parentModule = ParentModule();
       final childModule = ChildModule();
 
@@ -90,7 +90,7 @@ void main() {
       expect(childModule.buildContext, isNotNull);
     });
 
-    testWidgets('Modules\' dependency tree respects the Widget tree',
+    testWidgets("Modules' dependency tree respects the Widget tree",
         (widgetTester) async {
       final parentModule = ParentModule();
       final childModule = ChildModule();
@@ -131,9 +131,9 @@ void main() {
 }
 
 class TestAppFrame extends StatelessWidget {
-  const TestAppFrame({Key key, this.child}) : super(key: key);
+  const TestAppFrame({this.child, Key? key}) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
