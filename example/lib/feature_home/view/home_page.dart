@@ -2,9 +2,9 @@ import 'package:example/base/repo/sample_repo.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({this.title, Key? key}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -24,10 +24,10 @@ class MyHomePage extends StatelessWidget {
       );
 
   FutureBuilder<String> _buildTitle(BuildContext context) => FutureBuilder(
-        initialData: title,
+        initialData: title ?? '',
         //using repo directly for sake of
         //simplicity
         future: useSampleRepository(context).getTitle(),
-        builder: (_, snapshot) => Text(snapshot?.data ?? ''),
+        builder: (_, snapshot) => Text(snapshot.data ?? ''),
       );
 }

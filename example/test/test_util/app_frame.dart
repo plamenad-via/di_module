@@ -11,8 +11,8 @@ class TestAppFrame extends StatelessWidget {
     this.mockSampleApi,
   });
 
-  final Widget child;
-  final SampleApi mockSampleApi;
+  final Widget? child;
+  final SampleApi? mockSampleApi;
 
   @override
   Widget build(BuildContext context) => ModuleProvider<AppModule>(
@@ -35,7 +35,7 @@ class TestAppFrame extends StatelessWidget {
 class TestAppModule extends AppModule {
   TestAppModule({this.mockSampleApi});
 
-  final SampleApi mockSampleApi;
+  final SampleApi? mockSampleApi;
 
   @override
   void provideInstances() {

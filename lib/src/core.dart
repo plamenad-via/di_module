@@ -11,22 +11,16 @@ abstract class Module {
 
   final _ServiceLocator _serviceLocator = _ServiceLocator();
 
-  BuildContext buildContext;
+  BuildContext? buildContext;
 
   ///Check each module on the tree recursively for an instance
   ///of [T]
   @protected
   T get<T>({
     String qualifierName = _defaultQualifierName,
-    String traversalPathConcat,
+    String? traversalPathConcat,
   }) {
-    T result;
-
-    if (qualifierName == null) {
-      result = _serviceLocator.get<T>();
-    } else {
-      result = _serviceLocator.get<T>(qualifierName: qualifierName);
-    }
+    final result = _serviceLocator.get<T>(qualifierName: qualifierName);
 
     if (result != null) {
       return result;
@@ -37,9 +31,9 @@ abstract class Module {
         : '$traversalPathConcat -> $runtimeType';
 
     if (buildContext != null) {
-      Module parentModule;
+      Module? parentModule;
       try {
-        parentModule = ModuleProvider.of<Module>(buildContext, listen: false);
+        parentModule = ModuleProvider.of<Module>(buildContext!, listen: false);
       } catch (_) {}
 
       if (parentModule != null) {
@@ -62,13 +56,8 @@ abstract class Module {
   void provideSingleton<T>(
     _FactoryFunction<T> func, {
     String qualifierName = _defaultQualifierName,
-  }) {
-    if (qualifierName == null) {
-      _serviceLocator.registerSingleton<T>(func);
-    } else {
+  }) =>
       _serviceLocator.registerSingleton<T>(func, qualifierName: qualifierName);
-    }
-  }
 
   ///Provide an instance of [T] by using a factory constructor
   ///
@@ -79,13 +68,8 @@ abstract class Module {
   void provideFactory<T>(
     _FactoryFunction<T> func, {
     String qualifierName = _defaultQualifierName,
-  }) {
-    if (qualifierName == null) {
-      _serviceLocator.registerFactory<T>(func);
-    } else {
+  }) =>
       _serviceLocator.registerFactory<T>(func, qualifierName: qualifierName);
-    }
-  }
 
   @mustCallSuper
   void dispose() {
@@ -104,8 +88,8 @@ class ModuleProvider<T extends Module> extends Provider<T> {
   ///
   ///[child] the widget that will be built
   ModuleProvider({
-    @required this.module,
-    Widget child,
+    required this.module,
+    Widget? child,
   }) : super(
           create: (buildContext) {
             module.buildContext = buildContext;
@@ -129,8 +113,9 @@ class ModuleProvider<T extends Module> extends Provider<T> {
 
 typedef _FactoryFunction<T> = T Function();
 
+@immutable
 class _Qualifier {
-  _Qualifier(this.type, this.name);
+  const _Qualifier(this.type, this.name);
 
   final String name;
   final Type type;
@@ -153,7 +138,7 @@ class _Qualifier {
 class _ServiceLocator {
   final _serviceFactories = <_Qualifier, _ServiceFactory<dynamic>>{};
 
-  T get<T>({String qualifierName}) {
+  T? get<T>({required String qualifierName}) {
     final serviceFactory = _serviceFactories[_Qualifier(T, qualifierName)];
     if (serviceFactory == null) {
       return null;
@@ -163,7 +148,7 @@ class _ServiceLocator {
 
   _Qualifier registerFactory<T>(
     _FactoryFunction<T> factoryFunction, {
-    String qualifierName,
+    required String qualifierName,
   }) {
     _duplicationAssert(T, qualifierName);
     final _key = _Qualifier(T, qualifierName);
@@ -177,7 +162,7 @@ class _ServiceLocator {
 
   _Qualifier registerSingleton<T>(
     _FactoryFunction<T> singletonFactoryFunction, {
-    String qualifierName,
+    required String qualifierName,
   }) {
     _duplicationAssert(T, qualifierName);
     final _key = _Qualifier(T, qualifierName);
@@ -202,11 +187,17 @@ class _ServiceLocator {
 enum _ServiceFactoryType { factory, singleton }
 
 class _ServiceFactory<T> {
-  _ServiceFactory(this.type, {this.creationFunction, this.instance});
+  _ServiceFactory(this.type, {this.creationFunction, this.instance})
+      : assert(
+          (type == _ServiceFactoryType.factory && creationFunction != null) ||
+              (type == _ServiceFactoryType.singleton &&
+                  (creationFunction != null || instance != null)),
+          'You need to provide either a [creationFunction] or [instance]',
+        );
 
   final _ServiceFactoryType type;
-  final _FactoryFunction creationFunction;
-  Object instance;
+  final _FactoryFunction? creationFunction;
+  Object? instance;
 
   T getSingletonInstance() => instance as T;
 
@@ -214,9 +205,9 @@ class _ServiceFactory<T> {
     try {
       switch (type) {
         case _ServiceFactoryType.factory:
-          return creationFunction() as T;
+          return creationFunction!() as T;
         case _ServiceFactoryType.singleton:
-          instance ??= creationFunction();
+          instance ??= creationFunction!();
           return instance as T;
       }
     } catch (e, s) {
@@ -224,6 +215,5 @@ class _ServiceFactory<T> {
       print('Stack trace:\n $s');
       rethrow;
     }
-    return null;
   }
 }
