@@ -38,13 +38,17 @@ abstract class Module {
 
       if (parentModule != null) {
         return parentModule.get<T>(
-            qualifierName: qualifierName, traversalPathConcat: traversalPath);
+          qualifierName: qualifierName,
+          traversalPathConcat: traversalPath,
+        );
       }
     }
 
-    throw StateError('No registered factory for instance of type '
-        '${T.toString()} and qualifier name $qualifierName. '
-        'Looked in: $traversalPath');
+    throw StateError(
+      'No registered factory for instance of type '
+      '${T.toString()} and qualifier name $qualifierName. '
+      'Looked in: $traversalPath',
+    );
   }
 
   ///Provide an instance of [T] as a singleton
@@ -72,9 +76,7 @@ abstract class Module {
       _serviceLocator.registerFactory<T>(func, qualifierName: qualifierName);
 
   @mustCallSuper
-  void dispose() {
-    _serviceLocator.clear();
-  }
+  void dispose() => _serviceLocator.clear();
 
   ///This method needs to be overridden in modules in order to provide
   ///dependencies as either factory or singleton
@@ -100,8 +102,10 @@ class ModuleProvider<T extends Module> extends Provider<T> {
           lazy: false,
         ) {
     if (T == Module) {
-      throw StateError('You forgot to pass a type to the '
-          'ModelProvider<T>() constructor');
+      throw StateError(
+        'You forgot to pass a type to the '
+        'ModelProvider<T>() constructor',
+      );
     }
   }
 
@@ -178,9 +182,10 @@ class _ServiceLocator {
 
   void _duplicationAssert(Type type, String qualifierName) {
     assert(
-        !_serviceFactories.containsKey(_Qualifier(type, qualifierName)),
-        'The Type $type and qualifier name $qualifierName '
-        'pair is already registered');
+      !_serviceFactories.containsKey(_Qualifier(type, qualifierName)),
+      'The Type $type and qualifier name $qualifierName '
+      'pair is already registered',
+    );
   }
 }
 

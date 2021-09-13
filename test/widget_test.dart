@@ -24,8 +24,10 @@ void main() {
         ),
       );
 
-      expect(ModuleProvider.of<TestModule1>(innerContext, listen: false),
-          isNotNull);
+      expect(
+        ModuleProvider.of<TestModule1>(innerContext, listen: false),
+        isNotNull,
+      );
       expect(ModuleProvider.of<Module>(innerContext, listen: false), isNotNull);
 
       await widgetTester.pumpWidget(
@@ -56,12 +58,14 @@ void main() {
       expect(
         () => childModule.firstString,
         throwsA(
-          predicate((e) =>
-              e is StateError &&
-              e.message ==
-                  'No registered factory for '
-                      'instance of type String and qualifier name '
-                      'defaultInstance. Looked in: ChildModule'),
+          predicate(
+            (e) =>
+                e is StateError &&
+                e.message ==
+                    'No registered factory for '
+                        'instance of type String and qualifier name '
+                        'defaultInstance. Looked in: ChildModule',
+          ),
         ),
       );
       expect(() => childModule.secondString, throwsStateError);
@@ -117,13 +121,15 @@ void main() {
       expect(
         () => childModule.notFoundBool,
         throwsA(
-          predicate((e) =>
-              e is StateError &&
-              e.message ==
-                  'No registered factory for '
-                      'instance of type bool and qualifier name '
-                      'defaultInstance. Looked in: ChildModule -> '
-                      'ParentModule'),
+          predicate(
+            (e) =>
+                e is StateError &&
+                e.message ==
+                    'No registered factory for '
+                        'instance of type bool and qualifier name '
+                        'defaultInstance. Looked in: ChildModule -> '
+                        'ParentModule',
+          ),
         ),
       );
     });
@@ -180,14 +186,20 @@ class ChildModule extends Module {
 
   @override
   void provideInstances() {
-    provideFactory(() => '${get<String>()}, world',
-        qualifierName: 'childDefault');
-    provideFactory(() => '${get<String>(qualifierName: 'another')}, world',
-        qualifierName: 'childAnother');
+    provideFactory(
+      () => '${get<String>()}, world',
+      qualifierName: 'childDefault',
+    );
+    provideFactory(
+      () => '${get<String>(qualifierName: 'another')}, world',
+      qualifierName: 'childAnother',
+    );
 
     provideSingleton(() => get<double>() + 0.5, qualifierName: 'childDefault');
-    provideSingleton(() => get<double>(qualifierName: 'another') + 0.5,
-        qualifierName: 'childAnother');
+    provideSingleton(
+      () => get<double>(qualifierName: 'another') + 0.5,
+      qualifierName: 'childAnother',
+    );
   }
 }
 //endregion Test Modules

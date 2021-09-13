@@ -208,4 +208,4 @@ linter:
     - use_to_and_as_if_applicable
     - void_checks
     - package_names
-    - sort_pub_dependencies
+#    - sort_pub_dependencies
