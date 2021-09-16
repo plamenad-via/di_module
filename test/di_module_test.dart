@@ -178,10 +178,14 @@ class _TestModule7 extends Module {
 
   @override
   void provideInstances() {
-    provideSingleton(() => _SimpleObject('someName', 1, 2),
-        qualifierName: 'someQualifierName');
-    provideSingleton(() => _SimpleObject('someName', 1, 2),
-        qualifierName: 'anotherQualifierName');
+    provideSingleton(
+      () => _SimpleObject('someName', 1, 2),
+      qualifierName: 'someQualifierName',
+    );
+    provideSingleton(
+      () => _SimpleObject('someName', 1, 2),
+      qualifierName: 'anotherQualifierName',
+    );
   }
 }
 
@@ -193,10 +197,14 @@ class _TestModule8 extends Module {
 
   @override
   void provideInstances() {
-    provideFactory(() => _SimpleObject('someName', 1, 2),
-        qualifierName: 'someQualifierName');
-    provideFactory(() => _SimpleObject('someName', 1, 2),
-        qualifierName: 'anotherQualifierName');
+    provideFactory(
+      () => _SimpleObject('someName', 1, 2),
+      qualifierName: 'someQualifierName',
+    );
+    provideFactory(
+      () => _SimpleObject('someName', 1, 2),
+      qualifierName: 'anotherQualifierName',
+    );
   }
 }
 
