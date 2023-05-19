@@ -25,10 +25,10 @@ void main() {
       );
 
       expect(
-        ModuleProvider.of<TestModule1>(innerContext, listen: false),
+        ModuleProvider.of<TestModule1>(innerContext),
         isNotNull,
       );
-      expect(ModuleProvider.of<Module>(innerContext, listen: false), isNotNull);
+      expect(ModuleProvider.of<Module>(innerContext), isNotNull);
 
       await widgetTester.pumpWidget(
         TestAppFrame(child: Container()),
@@ -137,7 +137,7 @@ void main() {
 }
 
 class TestAppFrame extends StatelessWidget {
-  const TestAppFrame({this.child, Key? key}) : super(key: key);
+  const TestAppFrame({this.child, super.key});
 
   final Widget? child;
 

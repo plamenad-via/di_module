@@ -1,14 +1,17 @@
 import 'package:di_module/di_module.dart';
-import 'package:example/base/di/app_module.dart';
-import 'package:example/feature_home/di/home_module.dart';
-import 'package:example/feature_home/view/home_page.dart';
 import 'package:flutter/material.dart';
 
+import 'base/di/app_module.dart';
+import 'feature_home/di/home_module.dart';
+import 'feature_home/view/home_page.dart';
+
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) => ModuleProvider(
         ///AppModule will be available to the whole app

@@ -1,8 +1,9 @@
-import 'package:example/base/repo/sample_repo.dart';
 import 'package:flutter/material.dart';
 
+import '../../base/repo/sample_repo.dart';
+
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({this.title, Key? key}) : super(key: key);
+  const MyHomePage({this.title, super.key});
 
   final String? title;
 

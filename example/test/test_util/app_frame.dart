@@ -9,6 +9,7 @@ class TestAppFrame extends StatelessWidget {
   const TestAppFrame({
     this.child,
     this.mockSampleApi,
+    super.key,
   });
 
   final Widget? child;

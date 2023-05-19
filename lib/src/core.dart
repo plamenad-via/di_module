@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +34,7 @@ abstract class Module {
     if (buildContext != null) {
       Module? parentModule;
       try {
-        parentModule = ModuleProvider.of<Module>(buildContext!, listen: false);
+        parentModule = ModuleProvider.of<Module>(buildContext!);
       } catch (_) {}
 
       if (parentModule != null) {
@@ -45,7 +47,7 @@ abstract class Module {
 
     throw StateError(
       'No registered factory for instance of type '
-      '${T.toString()} and qualifier name $qualifierName. '
+      '$T and qualifier name $qualifierName. '
       'Looked in: $traversalPath',
     );
   }
@@ -91,6 +93,7 @@ class ModuleProvider<T extends Module> extends Provider<T> {
   ModuleProvider({
     required this.module,
     Widget? child,
+    super.key,
   }) : super(
           create: (buildContext) {
             module.buildContext = buildContext;
@@ -154,13 +157,13 @@ class _ServiceLocator {
     required String qualifierName,
   }) {
     _duplicationAssert(T, qualifierName);
-    final _key = _Qualifier(T, qualifierName);
-    _serviceFactories[_key] = _ServiceFactory<T>(
+    final qualifier = _Qualifier(T, qualifierName);
+    _serviceFactories[qualifier] = _ServiceFactory<T>(
       _ServiceFactoryType.factory,
       creationFunction: factoryFunction,
     );
 
-    return _key;
+    return qualifier;
   }
 
   _Qualifier registerSingleton<T>(
@@ -168,13 +171,13 @@ class _ServiceLocator {
     required String qualifierName,
   }) {
     _duplicationAssert(T, qualifierName);
-    final _key = _Qualifier(T, qualifierName);
+    final qualifier = _Qualifier(T, qualifierName);
     _serviceFactories[_Qualifier(T, qualifierName)] = _ServiceFactory<T>(
       _ServiceFactoryType.singleton,
       creationFunction: singletonFactoryFunction,
     );
 
-    return _key;
+    return qualifier;
   }
 
   void clear() => _serviceFactories.clear();
@@ -215,8 +218,8 @@ class _ServiceFactory<T> {
           return instance as T;
       }
     } catch (e, s) {
-      print('Error while creating $T');
-      print('Stack trace:\n $s');
+      log('Error while creating $T');
+      log('Stack trace:\n $s');
       rethrow;
     }
   }
