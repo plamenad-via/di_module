@@ -1,3 +1,4 @@
-## [0.0.1] - TODO: Add release date.
-
-* TODO: Describe initial release.
+## [1.0.0]
+* Initial Release
+* ## [1.2.0]
+* Upgrade Dart to 3.0.0 and update dependencies. Enforce new linting file.

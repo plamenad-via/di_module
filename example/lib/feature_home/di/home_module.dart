@@ -1,8 +1,9 @@
 import 'package:di_module/di_module.dart';
-import 'package:example/base/repo/sample_repo.dart';
+
+import '../../base/repo/sample_repo.dart';
 
 ///This is a feature-specific module.
-///It is provided only to [HomePage] and its descendants
+///It is provided only to HomePage and its descendants
 class HomeModule extends Module {
   SampleRepository get sampleRepository => get();
 
