@@ -73,8 +73,7 @@ abstract class Module {
   void provideFactory<T>(
     _FactoryFunction<T> func, {
     String qualifierName = _defaultQualifierName,
-  }) =>
-      _serviceLocator.registerFactory<T>(func, qualifierName: qualifierName);
+  }) => _serviceLocator.registerFactory<T>(func, qualifierName: qualifierName);
 
   @mustCallSuper
   void dispose() => _serviceLocator.clear();
@@ -84,34 +83,34 @@ abstract class Module {
   void provideInstances();
 }
 
-class ModuleProvider<T extends Module> extends Provider<T> {
-  ///Constructor of [ModuleProvider]
-  ///
-  ///[module] the [Module] that needs to be provided
-  ///
-  ///[child] the widget that will be built
-  ModuleProvider({
-    required this.module,
+class ModuleProvider {
+  const ModuleProvider._();
+
+  static Provider<T> create<T extends Module>({
+    required T Function() createModule,
     Widget? child,
-    super.key,
-  }) : super(
-          create: (buildContext) {
-            module.buildContext = buildContext;
-            return module;
-          },
-          dispose: (_, module) => module.dispose(),
-          child: Provider<Module>.value(value: module, child: child),
-          lazy: false,
-        ) {
+    Key? key,
+  }) {
     if (T == Module) {
       throw StateError(
         'You forgot to pass a type to the '
         'ModelProvider<T>() constructor',
       );
     }
-  }
 
-  final T module;
+    return Provider<T>(
+      key: key,
+      create: (buildContext) => createModule()..buildContext = buildContext,
+      dispose: (_, module) => module.dispose(),
+      lazy: false,
+      child: Builder(
+        builder: (context) => Provider<Module>.value(
+          value: Provider.of<T>(context, listen: false),
+          child: child,
+        ),
+      ),
+    );
+  }
 
   static T of<T>(BuildContext context, {bool listen = false}) =>
       Provider.of(context, listen: listen);
@@ -195,12 +194,12 @@ enum _ServiceFactoryType { factory, singleton }
 
 class _ServiceFactory<T> {
   _ServiceFactory(this.type, {this.creationFunction, this.instance})
-      : assert(
-          (type == _ServiceFactoryType.factory && creationFunction != null) ||
-              (type == _ServiceFactoryType.singleton &&
-                  (creationFunction != null || instance != null)),
-          'You need to provide either a [creationFunction] or [instance]',
-        );
+    : assert(
+        (type == _ServiceFactoryType.factory && creationFunction != null) ||
+            (type == _ServiceFactoryType.singleton &&
+                (creationFunction != null || instance != null)),
+        'You need to provide either a [creationFunction] or [instance]',
+      );
 
   final _ServiceFactoryType type;
   final _FactoryFunction? creationFunction;

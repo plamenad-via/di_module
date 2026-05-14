@@ -13,19 +13,19 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => ModuleProvider(
-        ///AppModule will be available to the whole app
-        module: AppModule(),
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: ModuleProvider(
-            module: HomeModule(),
-            child: const MyHomePage(title: 'Flutter Demo Home Page'),
-          ),
-        ),
-      );
+  Widget build(BuildContext context) => ModuleProvider.create(
+    ///AppModule will be available to the whole app
+    createModule: () => AppModule(),
+    child: MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: ModuleProvider.create(
+        createModule: () => HomeModule(),
+        child: const MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
+    ),
+  );
 }

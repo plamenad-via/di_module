@@ -30,9 +30,9 @@ Future<void> _givenIAmOnTheHomePage(WidgetTester widgetTester) async =>
     widgetTester.pumpWidget(_getSubjectWidget());
 
 Widget _getSubjectWidget() => TestAppFrame(
-      mockSampleApi: _mockSampleApi,
-      child: ModuleProvider<HomeModule>(
-        module: HomeModule(),
-        child: const MyHomePage(),
-      ),
-    );
+  mockSampleApi: _mockSampleApi,
+  child: ModuleProvider.create<HomeModule>(
+    createModule: () => HomeModule(),
+    child: const MyHomePage(),
+  ),
+);

@@ -6,29 +6,23 @@ import 'package:flutter/material.dart';
 import 'mock_classes.dart';
 
 class TestAppFrame extends StatelessWidget {
-  const TestAppFrame({
-    this.child,
-    this.mockSampleApi,
-    super.key,
-  });
+  const TestAppFrame({this.child, this.mockSampleApi, super.key});
 
   final Widget? child;
   final SampleApi? mockSampleApi;
 
   @override
-  Widget build(BuildContext context) => ModuleProvider<AppModule>(
-        module: TestAppModule(
-          mockSampleApi: mockSampleApi,
-        ),
-        child: MaterialApp(
-          title: 'Test widget frame',
-          theme: ThemeData(),
-          home: ModuleProvider<AppModule>(
-            module: TestAppModule(mockSampleApi: mockSampleApi),
-            child: child,
-          ),
-        ),
-      );
+  Widget build(BuildContext context) => ModuleProvider.create<AppModule>(
+    createModule: () => TestAppModule(mockSampleApi: mockSampleApi),
+    child: MaterialApp(
+      title: 'Test widget frame',
+      theme: ThemeData(),
+      home: ModuleProvider.create<AppModule>(
+        createModule: () => TestAppModule(mockSampleApi: mockSampleApi),
+        child: child,
+      ),
+    ),
+  );
 }
 
 //Give a new [AppModule] in order to be able to use
