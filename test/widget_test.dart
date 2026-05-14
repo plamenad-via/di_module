@@ -5,15 +5,16 @@ import 'package:mockito/mockito.dart';
 
 void main() {
   group('ModuleProvider tests', () {
-    testWidgets('Module gets disposed when ModuleProvider gets disposed',
-        (widgetTester) async {
+    testWidgets('Module gets disposed when ModuleProvider gets disposed', (
+      widgetTester,
+    ) async {
       final mockModule = MockModule();
       late BuildContext innerContext;
 
       await widgetTester.pumpWidget(
         TestAppFrame(
-          child: ModuleProvider<TestModule1>(
-            module: mockModule,
+          child: ModuleProvider.create<TestModule1>(
+            createModule: () => mockModule,
             child: Builder(
               builder: (context) {
                 innerContext = context;
@@ -30,15 +31,14 @@ void main() {
       );
       expect(ModuleProvider.of<Module>(innerContext), isNotNull);
 
-      await widgetTester.pumpWidget(
-        TestAppFrame(child: Container()),
-      );
+      await widgetTester.pumpWidget(TestAppFrame(child: Container()));
 
       await untilCalled(mockModule.dispose());
     });
 
-    testWidgets("Modules' buildContext is null before attaching to tree",
-        (widgetTester) async {
+    testWidgets("Modules' buildContext is null before attaching to tree", (
+      widgetTester,
+    ) async {
       final parentModule = ParentModule();
       final childModule = ChildModule();
 
@@ -46,8 +46,7 @@ void main() {
       expect(childModule.buildContext, isNull);
     });
 
-    testWidgets(
-        "ChildModule doesn't see ParentModule's dependencies until "
+    testWidgets("ChildModule doesn't see ParentModule's dependencies until "
         'it is injected in a ModuleProvider lower in the tree '
         "from ParentModule's ModuleProvider", (widgetTester) async {
       final parentModule = ParentModule();
@@ -73,17 +72,18 @@ void main() {
       expect(() => childModule.secondDouble, throwsStateError);
     });
 
-    testWidgets('Context is not null when attached to tree',
-        (widgetTester) async {
+    testWidgets('Context is not null when attached to tree', (
+      widgetTester,
+    ) async {
       final parentModule = ParentModule();
       final childModule = ChildModule();
 
       await widgetTester.pumpWidget(
         TestAppFrame(
-          child: ModuleProvider(
-            module: parentModule,
-            child: ModuleProvider(
-              module: childModule,
+          child: ModuleProvider.create(
+            createModule: () => parentModule,
+            child: ModuleProvider.create(
+              createModule: () => childModule,
               child: Container(),
             ),
           ),
@@ -94,17 +94,18 @@ void main() {
       expect(childModule.buildContext, isNotNull);
     });
 
-    testWidgets("Modules' dependency tree respects the Widget tree",
-        (widgetTester) async {
+    testWidgets("Modules' dependency tree respects the Widget tree", (
+      widgetTester,
+    ) async {
       final parentModule = ParentModule();
       final childModule = ChildModule();
 
       await widgetTester.pumpWidget(
         TestAppFrame(
-          child: ModuleProvider(
-            module: parentModule,
-            child: ModuleProvider(
-              module: childModule,
+          child: ModuleProvider.create(
+            createModule: () => parentModule,
+            child: ModuleProvider.create(
+              createModule: () => childModule,
               child: Container(),
             ),
           ),
@@ -142,11 +143,8 @@ class TestAppFrame extends StatelessWidget {
   final Widget? child;
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        title: 'Test widget frame',
-        theme: ThemeData(),
-        home: child,
-      );
+  Widget build(BuildContext context) =>
+      MaterialApp(title: 'Test widget frame', theme: ThemeData(), home: child);
 }
 
 //region Modules
@@ -202,4 +200,5 @@ class ChildModule extends Module {
     );
   }
 }
+
 //endregion Test Modules
