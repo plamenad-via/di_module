@@ -1,7 +1,7 @@
 import 'package:di_module/di_module.dart';
 import 'package:example/base/api/sample_api.dart';
 import 'package:example/base/di/app_module.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'mock_classes.dart';
 

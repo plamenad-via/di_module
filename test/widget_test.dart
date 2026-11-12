@@ -1,6 +1,6 @@
 import 'package:di_module/src/core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mockito/mockito.dart';
 
 void main() {
@@ -25,10 +25,7 @@ void main() {
         ),
       );
 
-      expect(
-        ModuleProvider.of<TestModule1>(innerContext),
-        isNotNull,
-      );
+      expect(ModuleProvider.of<TestModule1>(innerContext), isNotNull);
       expect(ModuleProvider.of<Module>(innerContext), isNotNull);
 
       await widgetTester.pumpWidget(TestAppFrame(child: Container()));

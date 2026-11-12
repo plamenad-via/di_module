@@ -1,5 +1,5 @@
 import 'package:di_module/di_module.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'base/di/app_module.dart';
 import 'feature_home/di/home_module.dart';

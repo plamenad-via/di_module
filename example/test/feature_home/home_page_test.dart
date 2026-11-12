@@ -2,7 +2,7 @@ import 'package:di_module/di_module.dart';
 import 'package:example/base/api/sample_api.dart';
 import 'package:example/feature_home/di/home_module.dart';
 import 'package:example/feature_home/view/home_page.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../test_util/app_frame.dart';

@@ -1,6 +1,6 @@
 # di_module
 
-A Flutter package than can be used for DI.
+A Flutter package that can be used for DI.
 
 ### Reasons for creating this package
 Provider is an excellent way to provide dependencies. However, when business logic gets more complex, taking care of providing and disposing multiple dependencies becomes complicated.

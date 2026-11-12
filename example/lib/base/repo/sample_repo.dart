@@ -1,5 +1,5 @@
 import 'package:di_module/di_module.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../feature_home/di/home_module.dart';
 import '../api/sample_api.dart';

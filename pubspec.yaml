@@ -1,16 +1,17 @@
 name: di_module
 description: A DI Flutter package
-version: 2.0.0
+version: 2.1.0
 
 environment:
-  sdk: '>=2.19.3 <4.0.0'
+  sdk: ^3.14.0
 
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^6.0.3
+  provider: ^6.1.5+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.2.0
+  material_ui: any
+  mockito: ^5.8.1
